@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <limits.h>
+#include <time.h>
+#include <stdlib.h>
+#define _CRT_SECURE_NO_WARNINGS
+
+int main() {
+
+    int n, **G = NULL, *deg = NULL;
+    int size = 0;
+    
+    printf("введите кол-во вершин: ");
+    scanf("%d", &n);
+
+    deg = (int*)malloc(n * sizeof(int));
+    G = (int**)malloc(n * sizeof(int*));
+
+    for(int i = 0; i < n; i++){
+        deg[i] = 0;
+        G[i] = (int*)malloc(n * sizeof(int));
+    }
+    
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+            G[i][j] = 0;
+        }
+    }
+
+    for(int i = 0; i < n; i++){
+        for(int j = i + 1; j < n; j++){ 
+            int edge = rand() % 2; 
+            G[i][j] = edge; 
+            G[j][i] = edge; 
+        }
+    }
+
+    printf("\nматрица смежности G:\n");
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+            printf("%d ", G[i][j]);
+        }
+        printf("\n");
+    }
+
+    
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            size += G[i][j];
+        }
+    }
+
+    printf("\nразмер неориентированного графа: %d \n ", size / 2); 
+
+    
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            deg[i] += G[i][j];
+        }
+    }
+
+    
+    for (int i = 0; i < n; i++) {
+        if (deg[i] == 0){
+            printf("вершина %d изолирована\n", i);
+        }
+        if (deg[i] == 1){
+            printf("вершина %d концевая\n", i);
+        }
+        if (deg[i] == n - 1){
+            printf("вершина %d доминирующая\n", i);
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        free(G[i]);
+    }
+    free(G);
+    free(deg);
+
+    getchar();
+    return 0;
+} 
